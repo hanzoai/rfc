@@ -89,6 +89,33 @@ const config: RFCConfig = {
     storageKey: 'hanzo-hips-theme',
     defaultTheme: 'system',
   },
+
+  footer: {
+    sections: [
+      {
+        title: 'Categories',
+        links: [
+          { label: 'Core Platform', href: '/docs/?type=core' },
+          { label: 'LLM Infrastructure', href: '/docs/?type=llm' },
+          { label: 'Agent Framework', href: '/docs/?type=agents' },
+        ],
+      },
+      {
+        title: 'Resources',
+        links: [
+          { label: 'All HIPs', href: '/docs/' },
+          { label: 'Developer Docs', href: 'https://hanzo.ai/docs', external: true },
+          { label: 'Discussion Forum', href: 'https://forum.hanzo.ai', external: true },
+        ],
+      },
+    ],
+    copyright: 'Hanzo AI',
+    socials: [
+      { platform: 'github', href: 'https://github.com/hanzoai' },
+      { platform: 'twitter', href: 'https://twitter.com/hanaboratory' },
+      { platform: 'discord', href: 'https://discord.gg/hanzo' },
+    ],
+  },
 };
 
 export default config;
