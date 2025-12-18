@@ -109,6 +109,33 @@ const config: RFCConfig = {
     storageKey: 'lux-lps-theme',
     defaultTheme: 'system',
   },
+
+  footer: {
+    sections: [
+      {
+        title: 'Categories',
+        links: [
+          { label: 'Core Architecture', href: '/docs/?type=core' },
+          { label: 'Consensus', href: '/docs/?type=consensus' },
+          { label: 'Cryptography', href: '/docs/?type=cryptography' },
+        ],
+      },
+      {
+        title: 'Resources',
+        links: [
+          { label: 'All LPs', href: '/docs/' },
+          { label: 'Developer Docs', href: 'https://docs.lux.network', external: true },
+          { label: 'Discussion Forum', href: 'https://lux.forum', external: true },
+        ],
+      },
+    ],
+    copyright: 'Lux Network',
+    socials: [
+      { platform: 'github', href: 'https://github.com/luxfi' },
+      { platform: 'twitter', href: 'https://twitter.com/luxnetwork' },
+      { platform: 'discord', href: 'https://discord.gg/luxnetwork' },
+    ],
+  },
 };
 
 export default config;

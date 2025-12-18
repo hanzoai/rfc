@@ -89,6 +89,33 @@ const config: RFCConfig = {
     storageKey: 'zoo-zips-theme',
     defaultTheme: 'system',
   },
+
+  footer: {
+    sections: [
+      {
+        title: 'Categories',
+        links: [
+          { label: 'Core Infrastructure', href: '/docs/?type=core' },
+          { label: 'Decentralized AI', href: '/docs/?type=deai' },
+          { label: 'Decentralized Science', href: '/docs/?type=desci' },
+        ],
+      },
+      {
+        title: 'Resources',
+        links: [
+          { label: 'All ZIPs', href: '/docs/' },
+          { label: 'Developer Docs', href: 'https://zoo.ngo/docs', external: true },
+          { label: 'Discussion Forum', href: 'https://forum.zoo.ngo', external: true },
+        ],
+      },
+    ],
+    copyright: 'Zoo Labs Foundation',
+    socials: [
+      { platform: 'github', href: 'https://github.com/zoo-labs' },
+      { platform: 'twitter', href: 'https://twitter.com/zoolabs' },
+      { platform: 'discord', href: 'https://discord.gg/zoolabs' },
+    ],
+  },
 };
 
 export default config;
