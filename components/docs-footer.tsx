@@ -17,7 +17,7 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
 
 export function DocsFooter() {
   const currentYear = new Date().getFullYear();
-  const { footer, name, shortName } = config;
+  const { footer } = config;
 
   return (
     <footer className="border-t border-border bg-card/30 mt-auto">
