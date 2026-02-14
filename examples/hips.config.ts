@@ -12,8 +12,17 @@ const config: RFCConfig = {
 
   baseUrl: 'https://hips.hanzo.ai',
   repoUrl: 'https://github.com/hanzoai/hips',
+  discussionsUrl: 'https://github.com/hanzoai/hips/discussions',
   forumUrl: 'https://forum.hanzo.ai',
-  helpUrl: 'https://hanzo.ai/docs',
+  helpUrl: 'https://help.hanzo.ai',
+  docsUrl: 'https://docs.hanzo.ai',
+
+  github: {
+    org: 'hanzoai',
+    repo: 'hips',
+    branch: 'main',
+    discussionsEnabled: true,
+  },
 
   rfcDir: '../HIPs',
   filePrefix: 'hip-',

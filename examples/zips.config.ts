@@ -12,8 +12,17 @@ const config: RFCConfig = {
 
   baseUrl: 'https://zips.zoo.ngo',
   repoUrl: 'https://github.com/zoo-labs/zips',
+  discussionsUrl: 'https://github.com/zoo-labs/zips/discussions',
   forumUrl: 'https://forum.zoo.ngo',
-  helpUrl: 'https://zoo.ngo/docs',
+  helpUrl: 'https://help.zoo.ngo',
+  docsUrl: 'https://docs.zoo.ngo',
+
+  github: {
+    org: 'zoo-labs',
+    repo: 'zips',
+    branch: 'main',
+    discussionsEnabled: true,
+  },
 
   rfcDir: '../ZIPs',
   filePrefix: 'zip-',

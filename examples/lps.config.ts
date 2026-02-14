@@ -12,8 +12,17 @@ const config: RFCConfig = {
 
   baseUrl: 'https://lps.lux.network',
   repoUrl: 'https://github.com/luxfi/lps',
+  discussionsUrl: 'https://github.com/luxfi/lps/discussions',
   forumUrl: 'https://lux.forum',
   helpUrl: 'https://lux.help',
+  docsUrl: 'https://docs.lux.network',
+
+  github: {
+    org: 'luxfi',
+    repo: 'lps',
+    branch: 'main',
+    discussionsEnabled: true,
+  },
 
   rfcDir: '../LPs',
   filePrefix: 'lp-',

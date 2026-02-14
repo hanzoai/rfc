@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, ExternalLink, Calendar, User, Tag } from 'lucide-react';
-import { DocsPage, DocsBody } from '@hanzo/docs/ui/page';
+import { DocsPage, DocsBody } from '@hanzo/radix/page';
 import { extractHeadings } from '@/lib/toc';
 import { FilteredView } from './filtered-view';
 
@@ -281,17 +281,37 @@ function RFCDetailPage({ page }: { page: any }) {
         )}
 
         {/* External Links */}
-        {frontmatter['discussions-to'] && (
+        <div className="flex flex-wrap items-center gap-4 mt-3">
+          {frontmatter['discussions-to'] && (
+            <a
+              href={frontmatter['discussions-to']}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ExternalLink className="size-3" />
+              Discussions
+            </a>
+          )}
           <a
-            href={frontmatter['discussions-to']}
+            href={`${config.repoUrl}/edit/main/${config.rfcDir.replace(/^\.\.\//, '')}/${config.filePrefix}${String(rfcNum).padStart(4, '0')}.md`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 mt-3 text-xs text-muted-foreground hover:text-foreground"
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ExternalLink className="size-3" />
-            Join Discussion
+            Edit on GitHub
           </a>
-        )}
+          <a
+            href={`${config.repoUrl}/discussions`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ExternalLink className="size-3" />
+            All Discussions
+          </a>
+        </div>
       </div>
 
       {/* Content */}

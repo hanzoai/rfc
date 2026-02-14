@@ -32,9 +32,18 @@ export interface RFCConfig {
   // URLs
   baseUrl: string;
   repoUrl: string;
+  discussionsUrl?: string;  // GitHub discussions URL (defaults to repoUrl/discussions)
   forumUrl?: string;
   helpUrl?: string;
   docsUrl?: string;
+
+  // GitHub settings
+  github: {
+    org: string;           // GitHub organization
+    repo: string;          // Repository name
+    branch?: string;       // Main branch (default: 'main')
+    discussionsEnabled?: boolean;  // Enable GitHub Discussions integration
+  };
 
   // Directory containing RFC markdown files (relative to project root)
   rfcDir: string;
@@ -90,8 +99,17 @@ const config: RFCConfig = {
   // URLs
   baseUrl: 'https://rfc.example.com',
   repoUrl: 'https://github.com/example/rfc',
+  discussionsUrl: 'https://github.com/example/rfc/discussions',
   forumUrl: 'https://forum.example.com',
   helpUrl: 'https://help.example.com',
+
+  // GitHub settings
+  github: {
+    org: 'example',
+    repo: 'rfc',
+    branch: 'main',
+    discussionsEnabled: true,
+  },
 
   // Directory containing RFC markdown files
   rfcDir: '../RFCs',  // Relative to docs folder
