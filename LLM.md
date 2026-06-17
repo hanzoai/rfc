@@ -1,4 +1,4 @@
-# LLM.md - Hanzo Rfc
+# Hanzo Rfc
 
 ## Overview
 RFC Documentation Template - for LPs, HIPs, ZIPs and similar proposal sites
