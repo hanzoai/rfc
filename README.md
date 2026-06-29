@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/hero.svg" alt="rfc" width="880"></p>
+
 # @hanzo/rfc
 
 RFC Documentation Template for building proposal documentation sites.
