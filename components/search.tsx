@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Hash, Layers, Search as SearchIcon } from 'lucide-react';
-import type { SearchEntry } from '@/lib/source';
+import type { RFCEntry } from '@/lib/source';
 import config from '@/rfc.config';
 
 /**
@@ -51,7 +51,7 @@ export function SearchTrigger() {
   );
 }
 
-export function SearchProvider({ index, children }: { index: SearchEntry[]; children: ReactNode }) {
+export function SearchProvider({ index, children }: { index: RFCEntry[]; children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState('');
   const [cursor, setCursor] = useState(0);
