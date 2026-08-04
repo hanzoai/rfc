@@ -1,702 +1,993 @@
 /**
- * Lux Documentation Theme
- * Tailwind CSS 4 + @hanzo/ui
+ * The one stylesheet.
+ *
+ * Design tokens come from @hanzo/ui — the canonical Hanzo identity, plain CSS
+ * custom properties, no build step. Everything below is a small SEMANTIC
+ * vocabulary (`rfc-card`, `rfc-badge`, `rfc-row`…) named for what a thing IS,
+ * not for what it looks like. There is exactly one definition per concept and
+ * markup never encodes presentation.
+ *
+ * No Tailwind, no utility strings, no `!important` — nothing is fighting a
+ * framework for the cascade any more.
  */
+@import '@hanzo/ui/theme.css';
 
-@import "tailwindcss";
-@import "@hanzo/radix/style.css";
+/* ── Tokens this site adds on top of the identity ─────────────────────────── */
 
-/* Typography plugin for Tailwind CSS 4 */
-@plugin "@tailwindcss/typography";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
-  --radius: 0.5rem;
-
-  /* Colors for button component and other UI elements */
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-}
-
-/* Light mode */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 9%;
-  --primary: 0 0% 9%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 0 0% 96%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 90%;
-  --input: 0 0% 90%;
-  --ring: 0 0% 64%;
+  /* Fonts bound by next/font in app/layout.tsx; the identity's Geist variables
+     resolve to them, so components inherit without naming a family. */
+  --font-geist-sans: var(--font-sans-provided), ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: var(--font-mono-provided), ui-monospace, SFMono-Regular, monospace;
 
-  /* Fumadocs overrides */
-  --color-fd-background: hsl(0, 0%, 100%);
-  --color-fd-foreground: hsl(0, 0%, 9%);
-  --color-fd-muted: hsl(0, 0%, 96%);
-  --color-fd-muted-foreground: hsl(0, 0%, 45%);
-  --color-fd-popover: hsl(0, 0%, 100%);
-  --color-fd-popover-foreground: hsl(0, 0%, 9%);
-  --color-fd-card: hsl(0, 0%, 100%);
-  --color-fd-card-foreground: hsl(0, 0%, 9%);
-  --color-fd-border: hsl(0, 0%, 90%);
-  --color-fd-primary: hsl(0, 0%, 9%);
-  --color-fd-primary-foreground: hsl(0, 0%, 100%);
-  --color-fd-secondary: hsl(0, 0%, 96%);
-  --color-fd-secondary-foreground: hsl(0, 0%, 9%);
-  --color-fd-accent: hsl(0, 0%, 96%);
-  --color-fd-accent-foreground: hsl(0, 0%, 9%);
-  --color-fd-ring: hsl(0, 0%, 64%);
+  /* Semantic hues. The proposal lifecycle and the category accents are the only
+     places this site uses colour, and every one of them resolves here. */
+  --hue-green: oklch(0.72 0.17 152);
+  --hue-emerald: oklch(0.72 0.15 162);
+  --hue-amber: oklch(0.78 0.16 76);
+  --hue-orange: oklch(0.72 0.17 52);
+  --hue-blue: oklch(0.66 0.18 253);
+  --hue-cyan: oklch(0.72 0.13 210);
+  --hue-indigo: oklch(0.61 0.2 275);
+  --hue-violet: oklch(0.63 0.22 296);
+  --hue-purple: oklch(0.63 0.23 305);
+  --hue-pink: oklch(0.68 0.21 350);
+  --hue-rose: oklch(0.67 0.21 15);
+  --hue-red: oklch(0.64 0.22 27);
+
+  /* Lifecycle → hue. One table; badges and dots both read it. */
+  --status-final: var(--hue-emerald);
+  --status-review: var(--hue-amber);
+  --status-last-call: var(--hue-blue);
+  --status-draft: var(--muted-foreground);
+  --status-withdrawn: var(--hue-red);
+
+  --shell-max: 72rem;
+  --prose-max: 50rem;
+  --sidebar-width: 16.25rem;
+  --toc-width: 14rem;
+  --header-height: 3.5rem;
+
+  --tint: 12%;
+
+  --code-bg: oklch(0.16 0 0);
+  --code-fg: oklch(0.92 0 0);
 }
 
-/* Dark mode */
-.dark {
-  --background: 0 0% 0%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 4%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 4%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 4%;
-  --secondary: 0 0% 10%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 8%;
-  --muted-foreground: 0 0% 55%;
-  --accent: 0 0% 12%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62% 50%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 15%;
-  --input: 0 0% 15%;
-  --ring: 0 0% 36%;
+/* Category accent. A component sets `data-accent="blue"` and everything inside
+   reads `--hue` — no per-colour class table duplicated across pages. */
+[data-accent] { --hue: var(--hue-blue); }
+[data-accent='green'] { --hue: var(--hue-green); }
+[data-accent='emerald'] { --hue: var(--hue-emerald); }
+[data-accent='amber'] { --hue: var(--hue-amber); }
+[data-accent='orange'] { --hue: var(--hue-orange); }
+[data-accent='blue'] { --hue: var(--hue-blue); }
+[data-accent='cyan'] { --hue: var(--hue-cyan); }
+[data-accent='indigo'] { --hue: var(--hue-indigo); }
+[data-accent='violet'] { --hue: var(--hue-violet); }
+[data-accent='purple'] { --hue: var(--hue-purple); }
+[data-accent='pink'] { --hue: var(--hue-pink); }
+[data-accent='rose'] { --hue: var(--hue-rose); }
+[data-accent='red'] { --hue: var(--hue-red); }
 
-  /* Fumadocs overrides */
-  --color-fd-background: hsl(0, 0%, 0%);
-  --color-fd-foreground: hsl(0, 0%, 98%);
-  --color-fd-muted: hsl(0, 0%, 8%);
-  --color-fd-muted-foreground: hsl(0, 0%, 55%);
-  --color-fd-popover: hsl(0, 0%, 4%);
-  --color-fd-popover-foreground: hsl(0, 0%, 98%);
-  --color-fd-card: hsl(0, 0%, 4%);
-  --color-fd-card-foreground: hsl(0, 0%, 98%);
-  --color-fd-border: hsl(0, 0%, 15%);
-  --color-fd-primary: hsl(0, 0%, 98%);
-  --color-fd-primary-foreground: hsl(0, 0%, 4%);
-  --color-fd-secondary: hsl(0, 0%, 10%);
-  --color-fd-secondary-foreground: hsl(0, 0%, 98%);
-  --color-fd-accent: hsl(0, 0%, 12%);
-  --color-fd-accent-foreground: hsl(0, 0%, 98%);
-  --color-fd-ring: hsl(0, 0%, 36%);
+/* ── Element defaults ─────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    font-synthesis-weight: none;
-    text-rendering: optimizeLegibility;
-  }
-
-  ::selection {
-    background: rgba(0, 0, 0, 0.15);
-  }
-
-  .dark ::selection {
-    background: rgba(255, 255, 255, 0.20);
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Layout spacing - Apple-inspired clean design */
-:root {
-  /* Fumadocs layout variables */
-  --fd-sidebar-width: 260px;
-  --fd-toc-width: 220px;
-  --fd-layout-offset: 0px;
-  --fd-content-max-width: 800px;
-  --fd-page-width: 1400px;
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--background);
+  color: var(--foreground);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Content wrapper (#nd-page) - add padding for fixed TOC since pe-(--fd-toc-width) doesn't work in Tailwind 4 */
-#nd-page {
-  padding-inline-start: 1.5rem !important;
-  padding-inline-end: var(--fd-toc-width) !important;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-/* Article content - centered within the available space */
-main article {
-  padding: 2rem !important;
-  max-width: var(--fd-content-max-width) !important;
-  width: 100% !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
-/* Index page layout - centered with proper top spacing */
-main > div.max-w-4xl {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
-  padding-top: 2.5rem !important;
-  max-width: 900px !important;
+svg {
+  display: block;
+  flex: none;
 }
 
-/* Docs main content - add top margin */
-main article {
-  padding-top: 2.5rem !important;
+::selection {
+  background: color-mix(in oklch, var(--foreground) 20%, transparent);
 }
 
-/* Responsive adjustments */
-@media (min-width: 1280px) {
-  :root {
-    --fd-sidebar-width: 280px;
-    --fd-toc-width: 240px;
-  }
+/* ── Layout primitives ────────────────────────────────────────────────────── */
 
-  main article {
-    padding: 2.5rem !important;
-  }
-
-  main > div.max-w-4xl {
-    max-width: 1000px !important;
-  }
+.rfc-shell {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+  padding-inline: 1rem;
 }
 
-@media (max-width: 1024px) {
-  :root {
-    --fd-toc-width: 200px;
-  }
-
-  main article {
-    padding: 1.5rem !important;
-  }
-
-  main > div.max-w-4xl {
-    max-width: 800px !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
-  }
+@media (min-width: 40rem) {
+  .rfc-shell { padding-inline: 1.5rem; }
 }
 
-@media (max-width: 768px) {
-  /* On mobile, sidebar is hidden so reset padding */
-  main > div.flex.mx-auto {
-    justify-content: flex-start !important;
-  }
-
-  main > div.max-w-4xl {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    max-width: 100% !important;
-  }
-
-  main article {
-    padding: 1rem !important;
-  }
-
-  main #nd-page {
-    justify-content: flex-start !important;
-  }
-
-  /* Reset TOC padding on mobile since TOC is hidden */
-  #nd-page {
-    padding-inline-end: 0 !important;
-  }
-
-  /* Reset sidebar padding on mobile since sidebar is a drawer */
-  main {
-    padding-left: 0 !important;
-    padding-inline-start: 0 !important;
-  }
+@media (min-width: 64rem) {
+  .rfc-shell { padding-inline: 2rem; }
 }
 
-/* Typography improvements - Apple-like precision */
-main article h1 {
-  font-size: 2.25rem !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.03em !important;
-  line-height: 1.15 !important;
-  margin-bottom: 1.25rem !important;
+/* Vertical flow with one gap knob. */
+.rfc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 0.75rem);
 }
 
-main article h2 {
-  font-size: 1.625rem !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.025em !important;
-  line-height: 1.25 !important;
-  margin-top: 3rem !important;
-  margin-bottom: 1rem !important;
-  padding-bottom: 0.75rem !important;
-  border-bottom: 1px solid hsl(var(--border) / 0.4) !important;
+/* Horizontal run that wraps. */
+.rfc-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap, 0.75rem);
 }
 
-main article h3 {
-  font-size: 1.25rem !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.02em !important;
-  margin-top: 2.25rem !important;
-  margin-bottom: 0.75rem !important;
+.rfc-cluster[data-between] {
+  justify-content: space-between;
 }
 
-main article h4 {
-  font-size: 1.1rem !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.015em !important;
-  margin-top: 1.75rem !important;
-  margin-bottom: 0.5rem !important;
+.rfc-cluster[data-center] {
+  justify-content: center;
 }
 
-main article p {
-  line-height: 1.8 !important;
-  margin-bottom: 1.5rem !important;
+.rfc-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
 }
 
-main article ul,
-main article ol {
-  margin-bottom: 1.5rem !important;
-  padding-left: 1.75rem !important;
+@media (min-width: 40rem) {
+  .rfc-grid[data-cols='2'],
+  .rfc-grid[data-cols='3'],
+  .rfc-grid[data-cols='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-main article li {
-  line-height: 1.75 !important;
-  margin-bottom: 0.625rem !important;
+@media (min-width: 64rem) {
+  .rfc-grid[data-cols='3'] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rfc-grid[data-cols='4'] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-main article li > ul,
-main article li > ol {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+.rfc-section {
+  padding-block: 4rem;
+}
+
+@media (min-width: 40rem) {
+  .rfc-section { padding-block: 5rem; }
+}
+
+.rfc-section[data-tinted] {
+  background: color-mix(in oklch, var(--muted) 35%, transparent);
+  border-block: 1px solid var(--border);
+}
+
+/* ── Type ─────────────────────────────────────────────────────────────────── */
+
+.rfc-title {
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.rfc-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.rfc-subheading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.rfc-lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.rfc-muted {
+  color: var(--muted-foreground);
+}
+
+.rfc-mono {
+  font-family: var(--font-geist-mono), monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.rfc-small {
+  font-size: 0.875rem;
+}
+
+.rfc-fine {
+  font-size: 0.75rem;
+}
+
+.rfc-truncate {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rfc-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  overflow: hidden;
+}
+
+.rfc-link {
+  color: var(--muted-foreground);
+  transition: color 0.15s ease;
+}
+
+.rfc-link:hover {
+  color: var(--foreground);
+}
+
+.rfc-link[data-underline] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+
+.rfc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding-inline: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.rfc-btn[data-size='sm'] {
+  height: 2rem;
+  padding-inline: 0.75rem;
+}
+
+.rfc-btn[data-variant='solid'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.rfc-btn[data-variant='solid']:hover {
+  background: color-mix(in oklch, var(--foreground) 88%, var(--background));
+}
+
+.rfc-btn[data-variant='outline'] {
+  border-color: var(--border);
+}
+
+.rfc-btn[data-variant='outline']:hover {
+  background: var(--muted);
+}
+
+.rfc-btn[data-variant='ghost']:hover {
+  background: var(--muted);
+}
+
+.rfc-btn:focus-visible,
+.rfc-icon-btn:focus-visible,
+.rfc-card:focus-visible,
+.rfc-row:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.rfc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius);
+  color: var(--muted-foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.rfc-icon-btn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.rfc-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: var(--muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────────── */
+
+.rfc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--card);
+  color: var(--card-foreground);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.rfc-card[data-accent] {
+  border-color: color-mix(in oklch, var(--hue) 25%, transparent);
+}
+
+a.rfc-card:hover,
+a.rfc-card:focus-visible {
+  border-color: color-mix(in oklch, var(--foreground) 25%, var(--border));
+}
+
+.rfc-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+a.rfc-row:hover {
+  border-color: color-mix(in oklch, var(--foreground) 25%, var(--border));
+  background: color-mix(in oklch, var(--accent) 50%, transparent);
+}
+
+.rfc-panel {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+/* ── Badges, dots, tiles ──────────────────────────────────────────────────── */
+
+.rfc-badge {
+  --hue: var(--status-draft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: none;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--hue) 30%, transparent);
+  background: color-mix(in oklch, var(--hue) var(--tint), transparent);
+  color: var(--hue);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.rfc-badge[data-status='Final'] { --hue: var(--status-final); }
+.rfc-badge[data-status='Review'] { --hue: var(--status-review); }
+.rfc-badge[data-status='Last Call'] { --hue: var(--status-last-call); }
+.rfc-badge[data-status='Withdrawn'] { --hue: var(--status-withdrawn); }
+
+/* Neutral pill: counts, ranges, tags. */
+.rfc-pill {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+a.rfc-pill:hover {
+  background: color-mix(in oklch, var(--primary) var(--tint), transparent);
+  color: var(--foreground);
+}
+
+.rfc-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--hue, var(--muted-foreground));
+  flex: none;
+}
+
+.rfc-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: calc(var(--radius) * 1.5);
+  background: color-mix(in oklch, var(--hue, var(--muted-foreground)) var(--tint), transparent);
+  color: var(--hue, var(--foreground));
+}
+
+.rfc-tile[data-size='sm'] {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius);
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* ── Stats strip ──────────────────────────────────────────────────────────── */
+
+.rfc-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 40rem) {
+  .rfc-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.rfc-stat {
+  padding: 2rem 1rem;
+  text-align: center;
+  border-inline-start: 1px solid var(--border);
+}
+
+.rfc-stat:first-child,
+.rfc-stat:nth-child(3) {
+  border-inline-start: 0;
+}
+
+@media (min-width: 40rem) {
+  .rfc-stat:nth-child(3) { border-inline-start: 1px solid var(--border); }
+}
+
+.rfc-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+/* ── Site chrome ──────────────────────────────────────────────────────────── */
+
+.rfc-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklch, var(--background) 85%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.rfc-header > .rfc-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+
+.rfc-footer {
+  border-top: 1px solid var(--border);
+  padding-block: 3rem;
+}
+
+.rfc-cta {
+  border-radius: calc(var(--radius) * 3);
+  background: var(--foreground);
+  color: var(--background);
+  padding: 2rem;
+}
+
+@media (min-width: 40rem) {
+  .rfc-cta { padding: 3rem; }
+}
+
+.rfc-cta .rfc-btn[data-variant='solid'] {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.rfc-cta .rfc-btn[data-variant='outline'] {
+  border-color: color-mix(in oklch, var(--background) 30%, transparent);
+}
+
+.rfc-cta .rfc-btn[data-variant='outline']:hover {
+  background: color-mix(in oklch, var(--background) 12%, transparent);
+}
+
+/* ── Logo lockup ──────────────────────────────────────────────────────────── */
+
+.rfc-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--foreground);
+  color: var(--background);
+  flex: none;
+}
+
+.rfc-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.rfc-lockup .rfc-logo {
+  transition: transform 0.2s ease;
+}
+
+.rfc-lockup:hover .rfc-logo {
+  transform: scale(1.1);
+}
+
+/* The short name swaps for the full name on hover — one cell, two layers. */
+.rfc-swap {
+  display: grid;
+  overflow: hidden;
+  height: 1.5rem;
+  align-items: center;
+}
+
+.rfc-swap > * {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.rfc-swap > :last-child {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.rfc-lockup:hover .rfc-swap > :first-child {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.rfc-lockup:hover .rfc-swap > :last-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Docs shell ───────────────────────────────────────────────────────────── */
+
+.rfc-docs {
+  display: flex;
+  align-items: flex-start;
+  max-width: 87.5rem;
+  margin-inline: auto;
+}
+
+.rfc-sidebar {
+  position: sticky;
+  top: 0;
+  flex: none;
+  width: var(--sidebar-width);
+  height: 100svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-inline-end: 1px solid var(--border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 63.99rem) {
+  .rfc-sidebar { display: none; }
+}
+
+.rfc-sidebar-group > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.rfc-sidebar-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.rfc-sidebar-group > summary::before {
+  content: '';
+  width: 0.35rem;
+  height: 0.35rem;
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+.rfc-sidebar-group[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.rfc-sidebar-group > summary:hover {
+  background: var(--muted);
+}
+
+.rfc-sidebar-link {
+  display: block;
+  padding: 0.3125rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.rfc-sidebar-link:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.rfc-sidebar-nest {
+  padding-inline-start: 0.75rem;
+  border-inline-start: 1px solid var(--border);
+  margin-inline-start: 0.5rem;
+}
+
+.rfc-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.rfc-article {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.rfc-article > article {
+  flex: 1;
+  min-width: 0;
+  max-width: var(--prose-max);
+}
+
+.rfc-toc {
+  position: sticky;
+  top: 1.5rem;
+  flex: none;
+  width: var(--toc-width);
+  max-height: calc(100svh - 3rem);
+  overflow-y: auto;
+  border-inline-start: 1px solid var(--border);
+  padding-inline-start: 1.25rem;
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 79.99rem) {
+  .rfc-toc { display: none; }
+}
+
+.rfc-toc a {
+  display: block;
+  padding: 0.25rem 0;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 2px solid transparent;
+  color: var(--muted-foreground);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.rfc-toc a:hover,
+.rfc-toc a[data-active] {
+  color: var(--foreground);
+  border-inline-start-color: var(--foreground);
+}
+
+/* ── Prose (rendered markdown) ────────────────────────────────────────────── */
+
+.rfc-prose {
+  line-height: 1.75;
+}
+
+.rfc-prose > :first-child {
+  margin-top: 0;
+}
+
+.rfc-prose h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 1.25rem;
+}
+
+.rfc-prose h2 {
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin: 3rem 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.rfc-prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 2.25rem 0 0.75rem;
+}
+
+.rfc-prose h4 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.rfc-prose p {
+  margin: 0 0 1.5rem;
+}
+
+.rfc-prose ul,
+.rfc-prose ol {
+  margin: 0 0 1.5rem;
+  padding-inline-start: 1.75rem;
+}
+
+.rfc-prose li {
+  margin-bottom: 0.5rem;
+}
+
+.rfc-prose li > ul,
+.rfc-prose li > ol {
+  margin-block: 0.5rem;
+}
+
+.rfc-prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rfc-prose a:hover {
+  opacity: 0.85;
+}
+
+.rfc-prose blockquote {
+  margin: 1.75rem 0;
+  padding: 0.75rem 1.5rem;
+  border-inline-start: 3px solid color-mix(in oklch, var(--primary) 30%, transparent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: color-mix(in oklch, var(--muted) 40%, transparent);
+  color: var(--muted-foreground);
+}
+
+.rfc-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.rfc-prose table {
+  width: 100%;
+  margin: 2rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rfc-prose th,
+.rfc-prose td {
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--border);
+  text-align: start;
+}
+
+.rfc-prose th {
+  background: color-mix(in oklch, var(--muted) 50%, transparent);
+  font-weight: 600;
+}
+
+.rfc-prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rfc-prose :not(pre) > code {
+  padding: 0.2em 0.45em;
+  border-radius: 0.375rem;
+  background: var(--muted);
+  font-size: 0.875em;
+  font-weight: 500;
 }
 
 /*
- * Code Blocks - shadcn/ui-inspired styling
- * Pure black background with proper monospace for ASCII art
+ * Code blocks carry ASCII diagrams in a lot of proposals: line-height must be
+ * exactly 1 and ligatures off, or the box-drawing characters stop connecting.
  */
-
-/* CSS Variables for code styling (shadcn/ui-inspired) */
-:root {
-  /* Slightly brighter black - not pure #000, stands out from page background */
-  --code-bg: #0d0d0d;
-  --code-fg: #e8e8e8;
-  --code-highlight-bg: rgba(255, 255, 255, 0.08);
-  --code-line-number: #666;
-  --code-border: rgba(255, 255, 255, 0.08);
-  /* Roboto Mono for code - excellent box-drawing character support */
-  --code-font: var(--font-roboto-mono), "Roboto Mono", "Menlo", "Monaco", "Consolas", ui-monospace, monospace;
+.rfc-prose pre {
+  margin: 2rem 0;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.25);
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-size: 0.875rem;
+  line-height: 1;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 4;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  letter-spacing: 0;
 }
 
-/* Pre element - the outer container */
-main article pre,
-article pre,
-.prose pre,
-pre {
-  border-radius: 0.625rem !important;
-  padding: 1.5rem 1.75rem !important;
-  margin: 2rem 0 !important;
-  font-size: 0.875rem !important;
-  /* CRITICAL for ASCII art: line-height must be exactly 1 for vertical bars to connect */
-  line-height: 1 !important;
-  overflow-x: auto !important;
-  border: 1px solid var(--code-border) !important;
-  background: var(--code-bg) !important;
-  color: var(--code-fg) !important;
-  font-family: var(--code-font) !important;
-  /* Critical for ASCII art alignment */
-  font-variant-ligatures: none !important;
-  font-feature-settings: "liga" 0, "calt" 0, "kern" 0 !important;
-  letter-spacing: 0 !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: geometricPrecision !important;
-  /* Preserve exact whitespace */
-  white-space: pre !important;
-  word-wrap: normal !important;
-  word-break: normal !important;
-  word-spacing: 0 !important;
-  overflow-wrap: normal !important;
-  tab-size: 4 !important;
-  -moz-tab-size: 4 !important;
-  /* Better shadow for depth */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+.rfc-prose pre code {
+  display: block;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
 }
 
-main article :not(pre) > code {
-  font-size: 0.875em !important;
-  padding: 0.2em 0.45em !important;
-  border-radius: 0.375rem !important;
-  background: hsl(var(--muted)) !important;
-  font-weight: 500 !important;
-  color: inherit !important;
+/* ── Search ───────────────────────────────────────────────────────────────── */
+
+.rfc-search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--muted) 50%, transparent);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  text-align: start;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Note: Backtick removal for inline code moved to end of file for proper cascade */
-
-/* Code element inside pre - must inherit ALL font settings */
-main article pre code,
-article pre code,
-.prose pre code,
-pre code {
-  padding: 0 !important;
-  background: transparent !important;
-  font-weight: 400 !important;
-  color: var(--code-fg) !important;
-  /* CRITICAL: Inherit ALL font settings from pre */
-  font-family: inherit !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  font-variant-ligatures: inherit !important;
-  font-feature-settings: inherit !important;
-  letter-spacing: inherit !important;
-  text-rendering: inherit !important;
-  white-space: inherit !important;
-  word-wrap: inherit !important;
-  word-break: inherit !important;
-  overflow-wrap: inherit !important;
-  tab-size: inherit !important;
-  -moz-tab-size: inherit !important;
-  /* Remove any default styling that might interfere */
-  display: block !important;
-  width: 100% !important;
-  min-width: 100% !important;
+.rfc-search-trigger:hover {
+  background: var(--muted);
+  color: var(--foreground);
 }
 
-/* Span elements inside code - ensure consistent font rendering */
-main article pre code span,
-article pre code span,
-.prose pre code span,
-pre code span,
-[data-rehype-pretty-code-figure] span,
-[data-line] span {
-  font-family: inherit !important;
-  font-size: inherit !important;
-  font-variant-ligatures: inherit !important;
-  font-feature-settings: inherit !important;
-  letter-spacing: inherit !important;
+.rfc-dialog {
+  width: min(42rem, calc(100% - 2rem));
+  max-height: 70svh;
+  margin: 12svh auto auto;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: var(--hz-elevation-4, 0 16px 48px rgb(0 0 0 / 0.44));
+  overflow: hidden;
 }
 
-/* Override ALL possible backgrounds from themes/plugins */
-main article pre[data-theme],
-main article pre[data-theme="dark"],
-main article pre[data-theme="light"],
-article pre[data-theme],
-.prose pre[data-theme],
-pre[data-theme],
-main article figure[data-rehype-pretty-code-figure] pre,
-main article figure[data-rehype-pretty-code-figure] pre[data-theme],
-figure[data-rehype-pretty-code-figure] pre,
-[data-rehype-pretty-code-figure] pre {
-  background: var(--code-bg) !important;
-  border: none !important;
+.rfc-dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
 }
 
-/* Clean code block styling - wrapper */
-main article figure[data-rehype-pretty-code-figure],
-figure[data-rehype-pretty-code-figure],
-[data-rehype-pretty-code-figure] {
-  margin: 2rem 0 !important;
-  border: none !important;
-  background: transparent !important;
-  border-radius: 0.625rem !important;
-  overflow: hidden !important;
+.rfc-dialog[open] {
+  animation: rfc-enter 0.15s ease-out;
 }
 
-/* Code title bar styling */
-main article [data-rehype-pretty-code-title],
-[data-rehype-pretty-code-title] {
-  background: #151515 !important;
-  color: #999 !important;
-  border: none !important;
-  border-bottom: 1px solid var(--code-border) !important;
-  border-radius: 0.625rem 0.625rem 0 0 !important;
-  padding: 0.75rem 1.25rem !important;
-  font-size: 0.8rem !important;
-  font-weight: 500 !important;
-  font-family: var(--code-font) !important;
-}
-
-main article [data-rehype-pretty-code-title] + pre,
-[data-rehype-pretty-code-title] + pre {
-  border-radius: 0 0 0.625rem 0.625rem !important;
-  margin-top: 0 !important;
-  border-top: none !important;
-}
-
-/* Data lines - ensure proper line rendering for ASCII art */
-main article pre code [data-line],
-main article pre [data-line],
-main article figure[data-rehype-pretty-code-figure] [data-line],
-[data-rehype-pretty-code-figure] [data-line],
-[data-line] {
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  background: transparent !important;
-  display: block !important;
-  /* Critical: preserve exact whitespace and line structure */
-  white-space: pre !important;
-  /* Line height must match pre for vertical alignment */
-  line-height: inherit !important;
-  /* Height should be exactly the font-size for connecting vertical lines */
-  min-height: 1em !important;
-  height: auto !important;
-  /* Ensure full width for proper text layout */
-  width: 100% !important;
-}
-
-/* Highlighted lines - subtle white glow */
-main article pre code [data-highlighted-line],
-[data-highlighted-line] {
-  background: var(--code-highlight-bg) !important;
-  border-left: 2px solid var(--code-line-number) !important;
-  margin-left: -1.5rem !important;
-  padding-left: calc(1.5rem - 2px) !important;
-}
-
-/* Nested code/pre - same background */
-main article pre pre,
-main article pre code pre,
-main article code code {
-  background: #000 !important;
-  border: none !important;
-}
-
-/* Line numbers if present - dim them */
-main article pre [data-line-numbers-config] span[data-line]::before {
-  color: #444 !important;
-}
-
-/* Tables - clean and readable */
-main article table {
-  width: 100% !important;
-  margin: 2rem 0 !important;
-  border-collapse: collapse !important;
-  font-size: 0.9rem !important;
-  border-radius: 0.5rem !important;
-  overflow: hidden !important;
-}
-
-main article th,
-main article td {
-  padding: 0.875rem 1.125rem !important;
-  border: 1px solid hsl(var(--border) / 0.6) !important;
-  text-align: left !important;
-}
-
-main article th {
-  background: hsl(var(--muted) / 0.4) !important;
-  font-weight: 600 !important;
-}
-
-main article tr:hover td {
-  background: hsl(var(--muted) / 0.2) !important;
-}
-
-/* Blockquotes - subtle emphasis */
-main article blockquote {
-  border-left: 3px solid hsl(var(--primary) / 0.3) !important;
-  padding: 0.75rem 1.5rem !important;
-  margin: 1.75rem 0 !important;
-  background: hsl(var(--muted) / 0.3) !important;
-  border-radius: 0 0.5rem 0.5rem 0 !important;
-}
-
-main article blockquote p {
-  margin-bottom: 0 !important;
-  color: hsl(var(--muted-foreground)) !important;
-}
-
-/* Links - subtle underline */
-main article a:not([class]) {
-  color: hsl(var(--primary)) !important;
-  text-decoration: underline !important;
-  text-underline-offset: 3px !important;
-  text-decoration-thickness: 1px !important;
-  transition: all 0.15s ease !important;
-}
-
-main article a:not([class]):hover {
-  text-decoration-thickness: 2px !important;
-  opacity: 0.85 !important;
-}
-
-/* Sidebar refinements - stable, fixed width, no movement */
-aside[role="complementary"] {
-  border-right: 1px solid hsl(var(--border) / 0.5) !important;
-  /* Fix sidebar alignment - override items-end that creates left gap */
-  align-items: stretch !important;
-  /* Fixed sidebar width - no transitions that cause movement */
-  width: var(--fd-sidebar-width) !important;
-  min-width: var(--fd-sidebar-width) !important;
-  max-width: var(--fd-sidebar-width) !important;
-  flex-shrink: 0 !important;
-  /* Prevent layout shift */
-  position: sticky !important;
-  top: 0 !important;
-  height: 100vh !important;
-  overflow-y: auto !important;
-  /* Disable transitions that cause "movement" feel */
-  transition: none !important;
-}
-
-/* Ensure sidebar children fill full width */
-aside[role="complementary"] > * {
-  width: 100% !important;
-  transition: none !important;
-}
-
-/* Remove all borders from sidebar bottom section */
-aside[role="complementary"] > div:last-child {
-  border-top: none !important;
-}
-
-/* Sidebar bottom buttons - remove border */
-aside[role="complementary"] button[aria-label*="Theme"],
-aside[role="complementary"] [class*="theme"] {
-  border: none !important;
-}
-
-/* Remove border above theme switcher section in fumadocs sidebar */
-aside[role="complementary"] [class*="footer"],
-aside[role="complementary"] footer,
-aside[role="complementary"] > div:has(button[aria-label*="Theme"]),
-aside[role="complementary"] > div:has([class*="theme"]),
-aside > div:last-child,
-aside > div[class*="flex"][class*="gap"] {
-  border: none !important;
-  border-top: none !important;
-}
-
-/* Fix sidebar content spacing */
-aside[role="complementary"] nav {
-  padding-bottom: 1rem !important;
-}
-
-/* Prevent sidebar tree items from causing layout shifts */
-aside[role="complementary"] [data-state] {
-  transition: none !important;
-}
-
-/* TOC refinements */
-nav[aria-label="Table of Contents"],
-.fd-toc {
-  border-left: 1px solid hsl(var(--border) / 0.3) !important;
-  padding-left: 1.5rem !important;
-}
-
-/* Main content area - ensure proper width */
-.fd-default-layout > div:not([role="complementary"]):not(.fd-toc) {
-  flex: 1 !important;
-  min-width: 0 !important;
-}
-
-/* Fix content container - constrain width to prevent TOC overlap */
-.fd-page-container {
-  max-width: calc(100% - var(--fd-toc-width) - 2rem) !important;
-}
-
-/* Ensure article content doesn't overflow into TOC */
-main.fd-default-layout article {
-  overflow-wrap: break-word !important;
-  word-wrap: break-word !important;
-}
-
-/* On larger screens, ensure proper spacing for TOC */
-@media (min-width: 1280px) {
-  .fd-page-container {
-    max-width: calc(100% - var(--fd-toc-width) - 3rem) !important;
+@keyframes rfc-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.97);
   }
 }
 
-/* Hide scrollbar utility */
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.rfc-search-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-inline: 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
 }
 
-/* Fill utilities for SVG */
-@utility fill-background {
-  fill: hsl(var(--background));
+.rfc-search-field input {
+  flex: 1;
+  min-width: 0;
+  height: 3rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--foreground);
+  background: none;
+  border: 0;
+  outline: none;
 }
 
-@utility fill-foreground {
-  fill: hsl(var(--foreground));
+.rfc-search-results {
+  max-height: 55svh;
+  overflow-y: auto;
+  padding: 0.5rem;
+  margin: 0;
+  list-style: none;
 }
 
-/* Search dialog animations */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.rfc-search-heading {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
 }
 
-@keyframes zoom-in-95 {
-  from { transform: translate(-50%, 0) scale(0.95); }
-  to { transform: translate(-50%, 0) scale(1); }
+.rfc-search-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius);
+  text-align: start;
 }
 
-@keyframes slide-in-from-top {
-  from { transform: translate(-50%, -8px) scale(0.95); }
-  to { transform: translate(-50%, 0) scale(1); }
+.rfc-search-item[data-active],
+.rfc-search-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 
-@utility animate-in {
-  animation: fade-in 0.15s ease-out, zoom-in-95 0.15s ease-out, slide-in-from-top 0.15s ease-out;
+.rfc-search-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
 }
 
-@utility fade-in-0 {
-  animation: fade-in 0.15s ease-out;
-}
-
-@utility zoom-in-95 {
-  animation: zoom-in-95 0.15s ease-out;
-}
-
-@utility slide-in-from-top-2 {
-  animation: slide-in-from-top 0.15s ease-out;
-}
-
-/*
- * CRITICAL: Remove Tailwind Typography backticks from ALL inline code
- * The Typography plugin adds content: "`" to code::before and code::after
- * This must be placed at the end and use simple selectors to ensure override
- */
-code::before,
-code::after {
-  content: none !important;
+.rfc-search-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
 }

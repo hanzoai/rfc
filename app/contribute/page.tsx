@@ -1,371 +1,223 @@
 import Link from 'next/link';
-import { Logo, LogoStatic } from '../../components/logo';
-import config from '@/rfc.config';
 import {
+  AlertCircle,
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
   FileText,
   GitPullRequest,
   MessageSquare,
-  CheckCircle,
-  ArrowRight,
-  ExternalLink,
   Terminal,
-  BookOpen,
-  AlertCircle,
-  Clock,
 } from 'lucide-react';
+import { SiteHeader, SiteFooter } from '@/components/chrome';
+import config from '@/rfc.config';
 
+const gap = (value: string) => ({ '--gap': value }) as React.CSSProperties;
 const shortName = config.shortName;
+const filePrefix = config.filePrefix;
 
 export const metadata = {
   title: 'Contribute',
-  description: `Learn how to submit and contribute to ${config.name}`,
+  description: `How to submit and contribute to ${config.name}`,
 };
+
+const steps = [
+  {
+    icon: BookOpen,
+    title: 'Read the existing proposals',
+    body: `Check whether your idea is already covered. Duplicate proposals are closed, and a related ${shortName} is usually the better place to extend.`,
+  },
+  {
+    icon: MessageSquare,
+    title: 'Open a discussion',
+    body: 'Float the idea before writing the specification. Early feedback is cheaper than a rewrite, and it establishes rough consensus.',
+  },
+  {
+    icon: FileText,
+    title: 'Draft the proposal',
+    body: `Copy the template, fill in the frontmatter, and write the specification. Number it after the maintainers assign one.`,
+  },
+  {
+    icon: GitPullRequest,
+    title: 'Open a pull request',
+    body: 'Submit the draft against the main branch. Review happens in the open, in the PR and the linked discussion.',
+  },
+];
+
+const lifecycle = [
+  { status: 'Draft', body: 'The proposal is written and under active revision. Anyone can open one.' },
+  { status: 'Review', body: 'The author considers the specification complete and is asking for formal review.' },
+  { status: 'Last Call', body: 'The final review window before acceptance. Objections must be raised now.' },
+  { status: 'Final', body: 'Accepted and considered a standard. Changes require a new proposal.' },
+  { status: 'Withdrawn', body: 'The author has retired the proposal.' },
+  { status: 'Stagnant', body: 'Inactive for long enough that it no longer tracks reality.' },
+];
+
+const frontmatter = `---
+${shortName.toLowerCase()}: <number>
+title: <short, descriptive title>
+description: <one sentence>
+author: Your Name (@your-handle)
+status: Draft
+type: Standards Track
+category: <category>
+created: <YYYY-MM-DD>
+---`;
 
 export default function ContributePage() {
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <Logo size={32} />
-            <span className="font-bold text-xl">{config.name}</span>
-          </Link>
-          <nav className="flex items-center gap-6 text-sm">
-            <Link href="/docs" className="text-muted-foreground hover:text-foreground transition-colors">
-              Browse {shortName}s
-            </Link>
-            <Link href="/contribute" className="text-foreground font-medium">
-              Contribute
-            </Link>
-          </nav>
-        </div>
-      </header>
+    <>
+      <SiteHeader />
 
-      {/* Hero */}
-      <section className="py-16 px-4 border-b border-border">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold mb-4">Contributing to {config.name}</h1>
-          <p className="text-xl text-muted-foreground">
-            Help shape the future by submitting proposals,
-            reviewing drafts, and participating in discussions.
+      <main>
+        <section className="rfc-shell rfc-section rfc-stack" style={gap('1rem')}>
+          <h1 className="rfc-title" style={{ fontSize: 'clamp(2rem, 1.5rem + 2vw, 2.75rem)' }}>
+            Contributing to {config.name}
+          </h1>
+          <p className="rfc-lead" style={{ maxWidth: '42rem' }}>
+            Help shape the future by submitting proposals, reviewing drafts and participating in discussions.
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* Quick Start */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8">Quick Start</h2>
-
-          <div className="space-y-6">
-            {/* Step 1 */}
-            <div className="flex gap-4 p-6 rounded-lg border border-border bg-card">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center font-bold">
-                1
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <MessageSquare className="size-5" />
-                  Discuss Your Idea
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Before writing a formal proposal, discuss your idea on the forum to gather
-                  feedback and gauge community interest. This helps refine your proposal before
-                  investing time in a full write-up.
-                </p>
-                {config.forumUrl && (
-                  <a
-                    href={config.forumUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-medium hover:underline"
-                  >
-                    Visit Forum <ExternalLink className="size-4" />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex gap-4 p-6 rounded-lg border border-border bg-card">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center font-bold">
-                2
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <FileText className="size-5" />
-                  Create Your Draft
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Fork the repository and use the interactive wizard or template to create
-                  a properly formatted {shortName} with all required sections.
-                </p>
-                <div className="bg-background rounded-lg p-4 font-mono text-sm border border-border">
-                  <div className="text-muted-foreground mb-2"># Clone and create new {shortName}</div>
-                  <div>git clone {config.repoUrl}</div>
-                  <div>cd {config.repoUrl.split('/').pop()}</div>
-                  <div>make new</div>
+        <section data-tinted>
+          <div className="rfc-shell rfc-section rfc-stack" style={gap('2rem')}>
+            <h2 className="rfc-heading">How a proposal gets written</h2>
+            <div className="rfc-grid" data-cols="2">
+              {steps.map((step, i) => (
+                <div key={step.title} className="rfc-card">
+                  <div className="rfc-cluster" style={gap('0.75rem')}>
+                    <span className="rfc-tile" data-size="sm">
+                      <step.icon size={16} />
+                    </span>
+                    <span className="rfc-mono rfc-small rfc-muted">Step {i + 1}</span>
+                  </div>
+                  <h3 className="rfc-subheading">{step.title}</h3>
+                  <p className="rfc-small rfc-muted" style={{ margin: 0 }}>
+                    {step.body}
+                  </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex gap-4 p-6 rounded-lg border border-border bg-card">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center font-bold">
-                3
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <GitPullRequest className="size-5" />
-                  Submit Pull Request
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Submit your draft as a PR. The PR number becomes your {shortName} number.
-                  Rename your file accordingly and address editor feedback.
-                </p>
-                <div className="bg-background rounded-lg p-4 font-mono text-sm border border-border">
-                  <div className="text-muted-foreground mb-2"># Validate and submit</div>
-                  <div>make pre-pr</div>
-                  <div>git add {config.rfcDir}/{config.filePrefix}draft.md</div>
-                  <div>git commit -m &quot;{shortName}: Your proposal title&quot;</div>
-                  <div>git push origin your-branch</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="flex gap-4 p-6 rounded-lg border border-border bg-card">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center font-bold">
-                4
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <CheckCircle className="size-5" />
-                  Progress Through Stages
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  Your {shortName} will progress through stages: Draft → Review → Last Call → Final.
-                  Address feedback, build consensus, and watch your proposal become a standard.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Structure */}
-      <section className="py-16 px-4 border-t border-border bg-card">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8">{shortName} Structure</h2>
-
-          <div className="space-y-4">
-            <div className="p-4 rounded-lg border border-border bg-background">
-              <h3 className="font-semibold mb-2">Required Frontmatter</h3>
-              <div className="bg-card rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                <pre>{`---
-${shortName.toLowerCase()}: <number>
-title: <descriptive title>
-description: <one-line description>
-author: <Name (@github-username)>
-discussions-to: <URL to discussion>
-status: Draft|Review|Last Call|Final|Withdrawn
-type: Standards Track|Meta|Informational
-category: Core|Networking|Interface
-created: <YYYY-MM-DD>
----`}</pre>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg border border-border bg-background">
-                <h3 className="font-semibold mb-2">Required Sections</h3>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Abstract (~200 words)</li>
-                  <li>• Motivation</li>
-                  <li>• Specification</li>
-                  <li>• Rationale</li>
-                  <li>• Backwards Compatibility</li>
-                  <li>• Security Considerations</li>
-                  <li>• Copyright (CC0)</li>
-                </ul>
-              </div>
-              <div className="p-4 rounded-lg border border-border bg-background">
-                <h3 className="font-semibold mb-2">For Standards Track</h3>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Test Cases (required)</li>
-                  <li>• Reference Implementation (recommended)</li>
-                  <li>• 2+ independent implementations for Final</li>
-                </ul>
-              </div>
-            </div>
+        <section className="rfc-shell rfc-section rfc-stack" style={gap('1.5rem')}>
+          <h2 className="rfc-heading">The frontmatter</h2>
+          <p className="rfc-muted" style={{ margin: 0, maxWidth: '42rem' }}>
+            Every file lives at <code>{`${config.rfcDir.replace(/^\.\.\//, '')}/${filePrefix}0000.md`}</code> and
+            opens with this block. The site reads it directly — the listing, filters and search all come from here.
+          </p>
+          <div className="rfc-prose">
+            <pre>
+              <code>{frontmatter}</code>
+            </pre>
           </div>
-        </div>
-      </section>
-
-      {/* Status Flow */}
-      <section className="py-16 px-4 border-t border-border">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8">Status Progression</h2>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-            <div className="px-4 py-2 rounded-lg bg-yellow-500/10 text-yellow-500 font-medium">
-              Draft
-            </div>
-            <ArrowRight className="size-5 text-muted-foreground" />
-            <div className="px-4 py-2 rounded-lg bg-blue-500/10 text-blue-500 font-medium">
-              Review
-            </div>
-            <ArrowRight className="size-5 text-muted-foreground" />
-            <div className="px-4 py-2 rounded-lg bg-purple-500/10 text-purple-500 font-medium">
-              Last Call (14 days)
-            </div>
-            <ArrowRight className="size-5 text-muted-foreground" />
-            <div className="px-4 py-2 rounded-lg bg-green-500/10 text-green-500 font-medium">
-              Final
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg border border-border bg-card">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock className="size-5 text-yellow-500" />
-                <h3 className="font-semibold">Draft</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Initial stage for new proposals. Authors can make significant changes
-                based on feedback. Not yet ready for implementation.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg border border-border bg-card">
-              <div className="flex items-center gap-2 mb-2">
-                <MessageSquare className="size-5 text-blue-500" />
-                <h3 className="font-semibold">Review</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Proposal is mature and seeking broader community feedback.
-                Only minor changes expected at this stage.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg border border-border bg-card">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="size-5 text-purple-500" />
-                <h3 className="font-semibold">Last Call</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Final review period (14 days). Last chance to raise concerns
-                before the proposal becomes Final.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg border border-border bg-card">
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle className="size-5 text-green-500" />
-                <h3 className="font-semibold">Final</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Accepted standard. No further changes except errata corrections.
-                Ready for implementation.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Commands Reference */}
-      <section className="py-16 px-4 border-t border-border bg-card">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
-            <Terminal className="size-6" />
-            Useful Commands
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { cmd: 'make new', desc: `Create a new ${shortName} using interactive wizard` },
-              { cmd: `make validate FILE=${config.rfcDir}/${config.filePrefix}N.md`, desc: `Validate a specific ${shortName}` },
-              { cmd: 'make validate-all', desc: `Validate all ${shortName} files` },
-              { cmd: 'make check-links', desc: 'Check all links in documents' },
-              { cmd: 'make update-index', desc: 'Update the README index' },
-              { cmd: 'make stats', desc: `Show ${shortName} statistics` },
-              { cmd: 'make list', desc: `List all ${shortName}s with titles` },
-              { cmd: 'make pre-pr', desc: 'Run all pre-PR checks' },
-            ].map((item) => (
-              <div key={item.cmd} className="p-3 rounded-lg border border-border bg-background">
-                <code className="text-sm font-mono text-foreground">{item.cmd}</code>
-                <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Resources */}
-      <section className="py-16 px-4 border-t border-border">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8">Resources</h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="rfc-cluster">
             <a
-              href={config.repoUrl}
+              href={`${config.repoUrl}/blob/main/CONTRIBUTING.md`}
               target="_blank"
-              rel="noopener noreferrer"
-              className="p-6 rounded-lg border border-border hover:border-foreground/20 transition-colors group"
+              rel="noreferrer"
+              className="rfc-btn"
+              data-variant="outline"
             >
-              <GitPullRequest className="size-8 mb-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-              <h3 className="font-semibold mb-2">GitHub Repository</h3>
-              <p className="text-sm text-muted-foreground">
-                View source, submit PRs, and track issues
-              </p>
+              <Terminal size={16} />
+              Contributing guide
             </a>
-            {config.forumUrl && (
-              <a
-                href={config.forumUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-6 rounded-lg border border-border hover:border-foreground/20 transition-colors group"
-              >
-                <MessageSquare className="size-8 mb-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <h3 className="font-semibold mb-2">Discussion Forum</h3>
-                <p className="text-sm text-muted-foreground">
-                  Discuss proposals and gather community feedback
-                </p>
-              </a>
-            )}
-            {config.helpUrl && (
-              <a
-                href={config.helpUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-6 rounded-lg border border-border hover:border-foreground/20 transition-colors group"
-              >
-                <BookOpen className="size-8 mb-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <h3 className="font-semibold mb-2">Documentation</h3>
-                <p className="text-sm text-muted-foreground">
-                  Learn more about the platform
-                </p>
-              </a>
-            )}
+            <a
+              href={config.discussionsUrl ?? `${config.repoUrl}/discussions`}
+              target="_blank"
+              rel="noreferrer"
+              className="rfc-btn"
+              data-variant="outline"
+            >
+              <ExternalLink size={16} />
+              Discussions
+            </a>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border">
-        <div className="container mx-auto flex items-center justify-between text-sm text-muted-foreground">
-          <LogoStatic size={20} />
-          <div className="flex items-center gap-6">
-            <Link href="/" className="hover:text-foreground">
-              Home
-            </Link>
-            <Link href="/docs" className="hover:text-foreground">
-              Browse {shortName}s
-            </Link>
-            <a href={config.repoUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
-              GitHub
-            </a>
+        <section data-tinted>
+          <div className="rfc-shell rfc-section rfc-stack" style={gap('1.5rem')}>
+            <div>
+              <h2 className="rfc-heading">Lifecycle</h2>
+              <p className="rfc-muted" style={{ margin: '0.25rem 0 0' }}>
+                Where a proposal sits, and what that means for you.
+              </p>
+            </div>
+            <div className="rfc-stack" style={gap('0.5rem')}>
+              {lifecycle.map((stage) => (
+                <div key={stage.status} className="rfc-row" style={{ alignItems: 'flex-start' }}>
+                  <span className="rfc-badge" data-status={stage.status} style={{ width: '6rem', justifyContent: 'center' }}>
+                    {stage.status}
+                  </span>
+                  <span className="rfc-small rfc-muted">{stage.body}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </section>
+
+        <section className="rfc-shell rfc-section rfc-grid" data-cols="3">
+          <div className="rfc-card">
+            <span className="rfc-tile" data-size="sm">
+              <CheckCircle2 size={16} />
+            </span>
+            <h3 className="rfc-subheading">What makes a good proposal</h3>
+            <p className="rfc-small rfc-muted" style={{ margin: 0 }}>
+              One idea, specified precisely enough that two independent implementations would interoperate. Motivation
+              first, then the specification, then the rationale for the choices made.
+            </p>
+          </div>
+          <div className="rfc-card">
+            <span className="rfc-tile" data-size="sm">
+              <AlertCircle size={16} />
+            </span>
+            <h3 className="rfc-subheading">What gets rejected</h3>
+            <p className="rfc-small rfc-muted" style={{ margin: 0 }}>
+              Bundles of unrelated changes, proposals with no implementation path, and anything that duplicates an
+              existing {shortName} without superseding it explicitly.
+            </p>
+          </div>
+          <div className="rfc-card">
+            <span className="rfc-tile" data-size="sm">
+              <Clock size={16} />
+            </span>
+            <h3 className="rfc-subheading">How long it takes</h3>
+            <p className="rfc-small rfc-muted" style={{ margin: 0 }}>
+              Review is asynchronous and driven by the people who will implement it. Keeping the discussion thread
+              answered is the fastest way through.
+            </p>
+          </div>
+        </section>
+
+        <section className="rfc-shell" style={{ paddingBottom: '4rem' }}>
+          <div className="rfc-cta rfc-stack" style={gap('1.5rem')}>
+            <h2 className="rfc-heading">Ready to start?</h2>
+            <p style={{ maxWidth: '36rem', margin: 0, opacity: 0.8 }}>
+              Read what already exists, then open a discussion with your idea.
+            </p>
+            <div className="rfc-cluster">
+              <Link href="/docs" className="rfc-btn" data-variant="solid">
+                Browse {shortName}s
+                <ArrowRight size={16} />
+              </Link>
+              <a
+                href={config.discussionsUrl ?? `${config.repoUrl}/discussions`}
+                target="_blank"
+                rel="noreferrer"
+                className="rfc-btn"
+                data-variant="outline"
+              >
+                Open a discussion
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
   );
 }
