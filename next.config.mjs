@@ -19,6 +19,20 @@ const config = {
   output: 'export',
   images: { unoptimized: true },
   trailingSlash: true,
+
+  // @hanzo/gui and the component layer on top of it ship untranspiled ESM that
+  // still names `react-native`. On web that name IS react-native-web, which is
+  // the alias below; `transpilePackages` is what makes Next compile the source
+  // rather than hand raw ESM to the server runtime.
+  transpilePackages: ['@hanzo/gui', '@hanzo/ui', '@hanzogui/config', 'react-native-web'],
+
+  webpack: (webpackConfig) => {
+    webpackConfig.resolve.alias = {
+      ...webpackConfig.resolve.alias,
+      'react-native$': 'react-native-web',
+    };
+    return webpackConfig;
+  },
 };
 
 export default config;

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Github, Globe, Linkedin, MessageCircle, Send, Twitter, Youtube } from 'lucide-react';
+import { Button } from '@hanzo/ui';
 import { Logo, Lockup } from './logo';
 import { ThemeToggle } from './theme-toggle';
 import config, { type SocialLink } from '@/rfc.config';
@@ -25,9 +26,9 @@ export function SiteHeader({ children }: { children?: React.ReactNode }) {
         <div className="rfc-cluster" style={{ '--gap': '0.75rem' } as React.CSSProperties}>
           {children}
           <ThemeToggle />
-          <Link href="/docs" className="rfc-btn" data-variant="solid" data-size="sm">
-            Browse
-          </Link>
+          <Button size="sm" asChild>
+            <Link href="/docs">Browse</Link>
+          </Button>
         </div>
       </div>
     </header>
