@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Github } from 'lucide-react';
+import { Button } from '@hanzo/ui/primitives/Button';
 import { SiteHeader, SiteFooter } from '@/components/chrome';
 import { CategoryIcon } from '@/components/category-icon';
 import { StatusBadge } from '@/components/proposal';
@@ -35,14 +36,18 @@ export default function HomePage() {
             {config.description}
           </p>
           <div className="rfc-cluster" data-center>
-            <a href={config.repoUrl} target="_blank" rel="noreferrer" className="rfc-btn" data-variant="outline">
-              <Github size={16} />
-              GitHub
-            </a>
-            <Link href="/docs" className="rfc-btn" data-variant="solid">
-              Browse proposals
-              <ArrowRight size={16} />
-            </Link>
+            <Button variant="outline" asChild>
+              <a href={config.repoUrl} target="_blank" rel="noreferrer">
+                <Github size={16} />
+                GitHub
+              </a>
+            </Button>
+            <Button asChild>
+              <Link href="/docs">
+                Browse proposals
+                <ArrowRight size={16} />
+              </Link>
+            </Button>
           </div>
         </section>
 
@@ -255,13 +260,15 @@ export default function HomePage() {
               Help shape the future by contributing proposals, reviewing drafts and participating in discussions.
             </p>
             <div className="rfc-cluster">
-              <Link href="/contribute" className="rfc-btn" data-variant="solid">
-                Read guidelines
-              </Link>
-              <a href={config.repoUrl} target="_blank" rel="noreferrer" className="rfc-btn" data-variant="outline">
-                <Github size={16} />
-                Open on GitHub
-              </a>
+              <Button asChild>
+                <Link href="/contribute">Read guidelines</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <a href={config.repoUrl} target="_blank" rel="noreferrer">
+                  <Github size={16} />
+                  Open on GitHub
+                </a>
+              </Button>
             </div>
           </div>
         </section>

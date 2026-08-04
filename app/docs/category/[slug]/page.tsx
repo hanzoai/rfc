@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { Button } from '@hanzo/ui/primitives/Button';
 import { CategoryIcon } from '@/components/category-icon';
 import { ProposalRow } from '@/components/proposal';
 import { rfcEntry, source } from '@/lib/source';
@@ -77,9 +78,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       )}
 
       {category.learnMore && (
-        <a href={category.learnMore} target="_blank" rel="noreferrer" className="rfc-btn" data-variant="outline">
-          Learn more
-        </a>
+        <Button variant="outline" asChild>
+          <a href={category.learnMore} target="_blank" rel="noreferrer">
+            Learn more
+          </a>
+        </Button>
       )}
     </div>
   );
