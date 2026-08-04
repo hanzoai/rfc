@@ -31,6 +31,21 @@ const config = {
       ...webpackConfig.resolve.alias,
       'react-native$': 'react-native-web',
     };
+
+    // PREPEND the web extensions. A react-native package publishes `Foo.js`
+    // beside `Foo.web.js` and imports `./Foo` extensionless, leaving the choice
+    // to the resolver — so the default extension order silently picks the
+    // NATIVE file on web. That is how @hanzo/ui reaches react-native-svg's
+    // fabric `*NativeComponent.js`, which imports react-native Flow source
+    // webpack cannot parse ("Module parse failed: Unexpected token").
+    webpackConfig.resolve.extensions = [
+      '.web.tsx',
+      '.web.ts',
+      '.web.jsx',
+      '.web.js',
+      ...webpackConfig.resolve.extensions,
+    ];
+
     return webpackConfig;
   },
 };
