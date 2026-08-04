@@ -1,11 +1,12 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { useThemeSetting } from '@hanzogui/next-theme';
+import { Button } from '@hanzo/ui/primitives/Button';
 
 export function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme();
+  const { resolvedTheme, set } = useThemeSetting();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -15,13 +16,14 @@ export function ThemeToggle() {
   const isDark = mounted && resolvedTheme === 'dark';
 
   return (
-    <button
+    <Button
       type="button"
-      className="rfc-icon-btn"
+      variant="ghost"
+      size="icon"
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onPress={() => set(isDark ? 'light' : 'dark')}
     >
       {isDark ? <Moon size={18} /> : <Sun size={18} />}
-    </button>
+    </Button>
   );
 }

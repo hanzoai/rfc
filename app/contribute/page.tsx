@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Terminal,
 } from 'lucide-react';
+import { Button } from '@hanzo/ui/primitives/Button';
 import { SiteHeader, SiteFooter } from '@/components/chrome';
 import config from '@/rfc.config';
 
@@ -115,26 +116,18 @@ export default function ContributePage() {
             </pre>
           </div>
           <div className="rfc-cluster">
-            <a
-              href={`${config.repoUrl}/blob/main/CONTRIBUTING.md`}
-              target="_blank"
-              rel="noreferrer"
-              className="rfc-btn"
-              data-variant="outline"
-            >
-              <Terminal size={16} />
-              Contributing guide
-            </a>
-            <a
-              href={config.discussionsUrl ?? `${config.repoUrl}/discussions`}
-              target="_blank"
-              rel="noreferrer"
-              className="rfc-btn"
-              data-variant="outline"
-            >
-              <ExternalLink size={16} />
-              Discussions
-            </a>
+            <Button variant="outline" asChild>
+              <a href={`${config.repoUrl}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noreferrer">
+                <Terminal size={16} />
+                Contributing guide
+              </a>
+            </Button>
+            <Button variant="outline" asChild>
+              <a href={config.discussionsUrl ?? `${config.repoUrl}/discussions`} target="_blank" rel="noreferrer">
+                <ExternalLink size={16} />
+                Discussions
+              </a>
+            </Button>
           </div>
         </section>
 
@@ -199,19 +192,17 @@ export default function ContributePage() {
               Read what already exists, then open a discussion with your idea.
             </p>
             <div className="rfc-cluster">
-              <Link href="/docs" className="rfc-btn" data-variant="solid">
-                Browse {shortName}s
-                <ArrowRight size={16} />
-              </Link>
-              <a
-                href={config.discussionsUrl ?? `${config.repoUrl}/discussions`}
-                target="_blank"
-                rel="noreferrer"
-                className="rfc-btn"
-                data-variant="outline"
-              >
-                Open a discussion
-              </a>
+              <Button asChild>
+                <Link href="/docs">
+                  Browse {shortName}s
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <a href={config.discussionsUrl ?? `${config.repoUrl}/discussions`} target="_blank" rel="noreferrer">
+                  Open a discussion
+                </a>
+              </Button>
             </div>
           </div>
         </section>

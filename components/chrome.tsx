@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Github, Globe, Linkedin, MessageCircle, Send, Twitter, Youtube } from 'lucide-react';
-import { Button } from '@hanzo/ui';
+import { Button } from '@hanzo/ui/primitives/Button';
 import { Logo, Lockup } from './logo';
 import { ThemeToggle } from './theme-toggle';
 import config, { type SocialLink } from '@/rfc.config';
