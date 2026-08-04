@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@hanzo/ui/primitives/Button';
 import { SiteHeader, SiteFooter } from '@/components/chrome';
+import { Inverted } from '@/components/inverted';
 import config from '@/rfc.config';
 
 const gap = (value: string) => ({ '--gap': value }) as React.CSSProperties;
@@ -191,19 +192,21 @@ export default function ContributePage() {
             <p style={{ maxWidth: '36rem', margin: 0, opacity: 0.8 }}>
               Read what already exists, then open a discussion with your idea.
             </p>
-            <div className="rfc-cluster">
-              <Button asChild>
-                <Link href="/docs">
-                  Browse {shortName}s
-                  <ArrowRight size={16} />
-                </Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <a href={config.discussionsUrl ?? `${config.repoUrl}/discussions`} target="_blank" rel="noreferrer">
-                  Open a discussion
-                </a>
-              </Button>
-            </div>
+            <Inverted>
+              <div className="rfc-cluster">
+                <Button asChild>
+                  <Link href="/docs">
+                    Browse {shortName}s
+                    <ArrowRight size={16} />
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href={config.discussionsUrl ?? `${config.repoUrl}/discussions`} target="_blank" rel="noreferrer">
+                    Open a discussion
+                  </a>
+                </Button>
+              </div>
+            </Inverted>
           </div>
         </section>
       </main>

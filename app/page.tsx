@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Github } from 'lucide-react';
 import { Button } from '@hanzo/ui/primitives/Button';
 import { SiteHeader, SiteFooter } from '@/components/chrome';
 import { CategoryIcon } from '@/components/category-icon';
+import { Inverted } from '@/components/inverted';
 import { StatusBadge } from '@/components/proposal';
 import { rfcHref, rfcLabel, source } from '@/lib/source';
 import config from '@/rfc.config';
@@ -259,17 +260,19 @@ export default function HomePage() {
             <p style={{ maxWidth: '36rem', margin: 0, opacity: 0.8 }}>
               Help shape the future by contributing proposals, reviewing drafts and participating in discussions.
             </p>
-            <div className="rfc-cluster">
-              <Button asChild>
-                <Link href="/contribute">Read guidelines</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <a href={config.repoUrl} target="_blank" rel="noreferrer">
-                  <Github size={16} />
-                  Open on GitHub
-                </a>
-              </Button>
-            </div>
+            <Inverted>
+              <div className="rfc-cluster">
+                <Button asChild>
+                  <Link href="/contribute">Read guidelines</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href={config.repoUrl} target="_blank" rel="noreferrer">
+                    <Github size={16} />
+                    Open on GitHub
+                  </a>
+                </Button>
+              </div>
+            </Inverted>
           </div>
         </section>
       </main>
