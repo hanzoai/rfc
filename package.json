@@ -27,7 +27,6 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@hanzogui/next-plugin": "8.0.2",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.1",
