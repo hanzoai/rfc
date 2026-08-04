@@ -1,17 +1,15 @@
 'use client';
 
-import {
-  createContext,
-  useContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Hash, Layers, Search as SearchIcon } from 'lucide-react';
+import { Hash, Layers, Search as SearchIcon } from 'lucide-react';
+import { Command } from '@hanzo/ui/primitives/Command';
+import { CommandDialog } from '@hanzo/ui/primitives/CommandDialog';
+import { CommandEmpty } from '@hanzo/ui/primitives/CommandEmpty';
+import { CommandGroup } from '@hanzo/ui/primitives/CommandGroup';
+import { CommandInput } from '@hanzo/ui/primitives/CommandInput';
+import { CommandItem } from '@hanzo/ui/primitives/CommandItem';
+import { CommandList } from '@hanzo/ui/primitives/CommandList';
 import type { RFCEntry } from '@/lib/source';
 import config from '@/rfc.config';
 
@@ -19,20 +17,26 @@ import config from '@/rfc.config';
  * Search, whole.
  *
  * The site is a static export, so there is nothing to query: the index is built
- * during `next build` and handed in as a prop. Matching is a substring scan —
- * for a few hundred proposals that is instant and needs no engine.
+ * during `next build` and handed in as a prop.
  *
- * The dialog is the platform's own `<dialog>` element. It gives modality, focus
- * trapping, the backdrop and Escape-to-close for free, which is the entire
- * reason a component library was here before.
+ * The palette itself is `Command` from @hanzo/ui — the modal, the cursor, the
+ * arrow-key traversal, the wrap-around, the empty state. It is gui-native (no
+ * cmdk), so it is the same palette on web, native and desktop, and it was
+ * already the answer to "how does a Hanzo surface do a command palette".
+ *
+ * What stays local is the part that is about proposals: which rows exist and
+ * where each one goes. `shouldFilter={false}` is deliberate — Command keeps
+ * filtered-out items MOUNTED, which is the right trade at menu scale and the
+ * wrong one for an index of hundreds of proposals, so matching stays a capped
+ * substring scan and Command is left to own the interaction.
  */
 
-interface Command {
+interface Row {
   key: string;
   title: string;
   detail: string;
   icon: ReactNode;
-  run: () => void;
+  href: string;
 }
 
 const SearchContext = createContext<(() => void) | null>(null);
@@ -52,146 +56,101 @@ export function SearchTrigger() {
 }
 
 export function SearchProvider({ index, children }: { index: RFCEntry[]; children: ReactNode }) {
-  const dialog = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [cursor, setCursor] = useState(0);
   const router = useRouter();
 
-  const open = useCallback(() => {
+  const show = useCallback(() => {
     setQuery('');
-    setCursor(0);
-    dialog.current?.showModal();
+    setOpen(true);
   }, []);
-
-  const close = useCallback(() => dialog.current?.close(), []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        if (dialog.current?.open) close();
-        else open();
+        setOpen((wasOpen) => !wasOpen);
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, close]);
+  }, []);
 
   // Jumping to a category is as much "search" as finding a proposal is, so the
-  // categories are commands in the same list rather than a separate menu.
-  const commands = useMemo<Command[]>(
+  // categories are rows in the same list rather than a separate menu.
+  const categories = useMemo<Row[]>(
     () =>
       config.categories.map((cat) => ({
         key: `category:${cat.slug}`,
         title: cat.name,
         detail: `${config.shortName}-${cat.range[0]} to ${config.shortName}-${cat.range[1]} · ${cat.shortDesc}`,
         icon: <Layers size={16} />,
-        run: () => router.push(`/docs/category/${cat.slug}`),
+        href: `/docs/category/${cat.slug}`,
       })),
-    [router],
+    [],
   );
 
   const needle = query.trim().toLowerCase();
 
-  const matches = useMemo<Command[]>(() => {
-    if (needle.length < 2) return commands;
+  const rows = useMemo<Row[]>(() => {
+    if (needle.length < 2) return categories;
 
     const proposals = index
       .filter((entry) => entry.haystack.includes(needle))
       .slice(0, 20)
-      .map<Command>((entry) => ({
+      .map<Row>((entry) => ({
         key: entry.url,
         title: `${entry.label}: ${entry.title}`,
         detail: entry.description || (entry.status ?? ''),
         icon: <Hash size={16} />,
-        run: () => router.push(entry.url),
+        href: entry.url,
       }));
 
-    const named = commands.filter((c) => c.title.toLowerCase().includes(needle));
-    return [...proposals, ...named];
-  }, [needle, index, commands, router]);
+    return [...proposals, ...categories.filter((c) => c.title.toLowerCase().includes(needle))];
+  }, [needle, index, categories]);
 
-  const choose = (command: Command) => {
-    close();
-    command.run();
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (!matches.length) return;
-      const step = e.key === 'ArrowDown' ? 1 : matches.length - 1;
-      setCursor((c) => (c + step) % matches.length);
-    } else if (e.key === 'Enter' && matches[cursor]) {
-      e.preventDefault();
-      choose(matches[cursor]);
-    }
+  const choose = (href: string) => {
+    setOpen(false);
+    router.push(href);
   };
 
   return (
-    <SearchContext.Provider value={open}>
+    <SearchContext.Provider value={show}>
       {children}
-      <dialog ref={dialog} className="rfc-dialog" aria-label="Search" onKeyDown={onKeyDown}>
-        <div className="rfc-search-field">
-          <SearchIcon size={18} />
-          <input
-            autoFocus
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={`Search ${config.name}`}
+        description={`Find a ${config.shortName} or jump to a category`}
+      >
+        <Command shouldFilter={false} loop>
+          <CommandInput
             value={query}
+            onValueChange={setQuery}
             placeholder={`Search ${config.name}…`}
-            aria-label="Search query"
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setCursor(0);
-            }}
           />
-          <kbd className="rfc-kbd">ESC</kbd>
-        </div>
-
-        <ul className="rfc-search-results">
-          <li className="rfc-search-heading">
-            {needle.length >= 2 ? `${matches.length} results` : 'Jump to'}
-          </li>
-          {matches.map((command, i) => (
-            <li key={command.key}>
-              <button
-                type="button"
-                className="rfc-search-item"
-                data-active={i === cursor || undefined}
-                onMouseEnter={() => setCursor(i)}
-                onClick={() => choose(command)}
-              >
-                <span className="rfc-tile" data-size="sm">
-                  {command.icon}
-                </span>
-                <span style={{ flex: 1, minWidth: 0 }}>
-                  <span className="rfc-truncate" style={{ display: 'block', fontWeight: 500 }}>
-                    {command.title}
+          <CommandList>
+            <CommandEmpty>No proposals match “{query}”.</CommandEmpty>
+            <CommandGroup heading={needle.length >= 2 ? `${rows.length} results` : 'Jump to'}>
+              {rows.map((row) => (
+                <CommandItem key={row.key} value={row.key} onSelect={() => choose(row.href)}>
+                  <span className="rfc-tile" data-size="sm">
+                    {row.icon}
                   </span>
-                  <span className="rfc-truncate rfc-small rfc-muted" style={{ display: 'block' }}>
-                    {command.detail}
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    <span className="rfc-truncate" style={{ display: 'block', fontWeight: 500 }}>
+                      {row.title}
+                    </span>
+                    <span className="rfc-truncate rfc-small rfc-muted" style={{ display: 'block' }}>
+                      {row.detail}
+                    </span>
                   </span>
-                </span>
-                <ArrowRight size={16} className="rfc-muted" />
-              </button>
-            </li>
-          ))}
-          {matches.length === 0 && (
-            <li className="rfc-search-empty">No proposals match “{query}”.</li>
-          )}
-        </ul>
-
-        <div className="rfc-search-foot">
-          <span>
-            <kbd className="rfc-kbd">↑</kbd> <kbd className="rfc-kbd">↓</kbd> navigate
-          </span>
-          <span>
-            <kbd className="rfc-kbd">Enter</kbd> open
-          </span>
-          <span>
-            <kbd className="rfc-kbd">Esc</kbd> close
-          </span>
-        </div>
-      </dialog>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </CommandDialog>
     </SearchContext.Provider>
   );
 }
