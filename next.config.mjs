@@ -1,12 +1,16 @@
 // Plain .mjs, not next.config.ts — deliberately.
 //
-// Next loads a TypeScript config through the TypeScript compiler API, which makes
-// config LOADING depend on which TypeScript is installed. On the native compiler
-// (@typescript/native-preview) the API surface differs and the build dies before
-// compiling anything. As ESM there is nothing to resolve: Next reads this file
-// natively and the type comes from the JSDoc annotation.
+// Next loads a TypeScript config through the TypeScript compiler API, so a .ts
+// config would make config LOADING depend on which TypeScript is installed. As
+// ESM there is nothing to resolve: Next reads this file natively and the type
+// comes from the JSDoc annotation.
 //
-// Typechecking is a separate concern and runs on tsgo (`pnpm typecheck`).
+// That dependency is not hypothetical. Next also reads `compilerOptions.paths`
+// through `ts.parseJsonConfigFileContent`, and TypeScript 7 — the native Go
+// compiler — ships no JS API at all (`require('typescript')` is just
+// `{version, versionMajorMinor}`). Under 7 every `@/…` import fails to resolve
+// and the type-check step silently disappears, so this repo stays on 5.x until
+// Next stops linking the API. See LLM.md.
 
 /** @type {import('next').NextConfig} */
 const config = {

@@ -12,9 +12,14 @@ directory; nothing else needs editing.
 - **[@hanzo/ui](https://npmjs.com/package/@hanzo/ui) 8.x** — the canonical Hanzo
   component layer, itself built on `@hanzo/gui` (Tamagui hard fork). This site
   consumes its design tokens via `@hanzo/ui/theme.css`.
-- **TypeScript 7** — the native Go compiler. `tsc` and `tsgo` are the same ELF
-  binary; `pnpm typecheck` runs it. Do NOT add `@typescript/native-preview`,
-  which is a 7.0.0-dev line behind stable.
+- **TypeScript 5.9** — deliberately, not 7. TypeScript 7 is the native Go
+  compiler and this repo's sources are clean under it (`tsc --noEmit` exits 0),
+  but 7 ships **no JS compiler API**: `require('typescript')` yields only
+  `{version, versionMajorMinor}`. Next reads `compilerOptions.paths` through
+  `ts.parseJsonConfigFileContent`, so under 7 every `@/…` import fails to
+  resolve and the type-check step silently vanishes. Move when Next stops
+  linking the API. Never add `@typescript/native-preview` — that is a
+  7.0.0-dev line *behind* stable 7.
 - **No Tailwind, no Radix, no shadcn, no PostCSS.** Styling is one stylesheet
   (`app/global.css`) of semantic classes over CSS custom properties.
 
@@ -23,7 +28,7 @@ directory; nothing else needs editing.
 pnpm install
 pnpm build       # next build -> ./out
 pnpm dev         # port 3002
-pnpm typecheck   # tsgo --noEmit
+pnpm typecheck   # tsc --noEmit
 ```
 
 ## Structure
