@@ -122,7 +122,7 @@ const config: RFCConfig = {
     socials: [
       { platform: 'github', href: 'https://github.com/hanzoai' },
       { platform: 'twitter', href: 'https://twitter.com/hanaboratory' },
-      { platform: 'discord', href: 'https://discord.gg/hanzo' },
+      { platform: 'discord', href: 'https://discord.gg/CJCyAsm9Vr' },
     ],
   },
 };
