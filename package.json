@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@hanzo/gui": "8.0.1",
-    "@hanzo/ui": "^8.0.39",
+    "@hanzo/ui": "^8.0.76",
     "@hanzogui/config": "8.0.1",
     "@hanzogui/next-theme": "8.0.0",
     "gray-matter": "^4.0.3",
@@ -34,5 +34,10 @@
     "satori": "^0.18.3",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.12.4",
+  "pnpm": {
+    "overrides": {
+      "@hanzo/ui": "8.0.76"
+    }
+  }
 }
