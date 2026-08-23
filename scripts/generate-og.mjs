@@ -7,6 +7,7 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import { writeFileSync, mkdirSync, readFileSync } from 'fs';
+import { createRequire } from 'module';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,26 +17,16 @@ const publicDir = join(__dirname, '..', 'public');
 // Ensure public directory exists
 mkdirSync(publicDir, { recursive: true });
 
-// Load Inter fonts from local files
-const fontsDir = join(__dirname, 'fonts');
-const regularFontPath = join(fontsDir, 'Inter-Regular.ttf');
-const boldFontPath = join(fontsDir, 'Inter-SemiBold.ttf');
+// Zen, the same family the site renders. The browser gets the woff2 @hanzo/design
+// declares; satori reads only TTF/OTF, so here the cuts come from @hanzo/font,
+// where the faces are authored. Resolved through node_modules — never copied in.
+const require = createRequire(import.meta.url);
+const zen = (cut) => readFileSync(require.resolve(`@hanzo/font/dist/fonts/zen-sans/Zen-${cut}.ttf`));
 
 const fonts = [
-  {
-    name: 'Inter',
-    data: readFileSync(regularFontPath),
-    weight: 400,
-    style: 'normal',
-  },
-  {
-    name: 'Inter',
-    data: readFileSync(boldFontPath),
-    weight: 600,
-    style: 'normal',
-  },
+  { name: 'Zen', data: zen('Regular'), weight: 400, style: 'normal' },
+  { name: 'Zen', data: zen('SemiBold'), weight: 600, style: 'normal' },
 ];
-console.log(`Loaded ${fonts.length} fonts from ${fontsDir}`);
 
 // OG Image component (as React-like object)
 const ogImageJsx = {
