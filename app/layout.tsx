@@ -1,16 +1,9 @@
 import './global.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import { source } from '@/lib/source';
 import config from '@/rfc.config';
-
-// Geist is the Hanzo identity's typeface; `@hanzo/ui/theme.css` resolves its
-// own --font-geist-* variables to whatever these bind, so nothing downstream
-// names a family.
-const sans = Geist({ subsets: ['latin'], variable: '--font-sans-provided', display: 'swap' });
-const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono-provided', display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
@@ -38,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <Providers index={source.getIndex()}>{children}</Providers>
       </body>

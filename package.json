@@ -12,6 +12,7 @@
     "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
+    "@hanzo/design": "^0.5.20",
     "@hanzo/gui": "8.0.1",
     "@hanzo/ui": "^8.0.39",
     "@hanzogui/config": "8.0.1",
@@ -27,6 +28,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@hanzo/font": "^1.8.0",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.1",

@@ -11,14 +11,20 @@
  * framework for the cascade any more.
  */
 @import '@hanzo/ui/theme.css';
+/* Zen, the one family. @hanzo/design ships the faces and declares them, so this
+   import is the whole of it — nothing is vendored here and a face update arrives
+   with the package. It follows the identity deliberately: --font-sans and
+   --font-mono resolve to Zen whichever @hanzo/ui is installed. */
+@import '@hanzo/design/tokens/fonts.css';
 
 /* ── Tokens this site adds on top of the identity ─────────────────────────── */
 
 :root {
-  /* Fonts bound by next/font in app/layout.tsx; the identity's Geist variables
-     resolve to them, so components inherit without naming a family. */
-  --font-geist-sans: var(--font-sans-provided), ui-sans-serif, system-ui, sans-serif;
-  --font-geist-mono: var(--font-mono-provided), ui-monospace, SFMono-Regular, monospace;
+  /* @hanzo/ui still spells the identity's families --font-geist-*, and its own
+     body/code rules read those names. Point them at Zen so nothing downstream
+     resolves a second family. */
+  --font-geist-sans: var(--font-sans);
+  --font-geist-mono: var(--font-mono);
 
   /* Semantic hues. The proposal lifecycle and the category accents are the only
      places this site uses colour, and every one of them resolves here. */
@@ -52,6 +58,25 @@
 
   --code-bg: oklch(0.16 0 0);
   --code-fg: oklch(0.92 0 0);
+}
+
+/* gui names its face through ONE property, --f-family, which it sets on each
+   `.font_<token>` class it injects at runtime and every component reads. It wraps
+   the app in `.font_body`, so whatever that resolves to is the whole page. Point
+   them at Zen. The doubled `:root` is the specificity: gui injects after this
+   sheet, so an equal-weight rule would lose on source order.
+
+   Three of gui's four font tokens resolve here. The fourth, `silkscreen`, is a
+   pixel face with no counterpart in the token layer, and nothing on this site
+   asks for it — Zen Pixel exists but @hanzo/design declares no variable for it,
+   and vendoring the binary to invent one is the thing this import avoids. */
+:root:root .font_body,
+:root:root .font_heading {
+  --f-family: var(--font-sans);
+}
+
+:root:root .font_mono {
+  --f-family: var(--font-mono);
 }
 
 /* Category accent. A component sets `data-accent="blue"` and everything inside
@@ -222,7 +247,7 @@ svg {
 }
 
 .rfc-mono {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
 }
 
@@ -284,7 +309,7 @@ svg {
   border: 1px solid var(--border);
   border-radius: 0.25rem;
   background: var(--muted);
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.6875rem;
   color: var(--muted-foreground);
 }
