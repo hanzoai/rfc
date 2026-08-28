@@ -12,9 +12,9 @@
     "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
-    "@hanzo/design": "^0.5.20",
-    "@hanzo/gui": "8.0.1",
-    "@hanzo/ui": "^8.0.76",
+    "@hanzo/design": "0.5.24",
+    "@hanzo/gui": "8.3.0",
+    "@hanzo/ui": "8.25.0",
     "@hanzogui/config": "8.0.1",
     "@hanzogui/next-theme": "8.0.0",
     "gray-matter": "^4.0.3",
@@ -28,7 +28,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@hanzo/font": "^1.8.0",
+    "@hanzo/font": "1.9.2",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.1",
@@ -36,10 +36,10 @@
     "satori": "^0.18.3",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@11.24.0",
   "pnpm": {
     "overrides": {
-      "@hanzo/ui": "8.0.76"
+      "@hanzo/ui": "8.25.0"
     }
   }
 }
