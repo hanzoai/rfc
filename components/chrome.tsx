@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Github, Globe, Linkedin, MessageCircle, Send, Twitter, Youtube } from 'lucide-react';
+import { Globe, MessageCircle, Send } from 'lucide-react'
+import { Github, Linkedin, Twitter, Youtube } from '@hanzo/ui/brands';
 import { Button } from '@hanzo/ui/primitives/Button';
 import { Logo, Lockup } from './logo';
 import { ThemeToggle } from './theme-toggle';

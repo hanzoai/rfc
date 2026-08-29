@@ -12,34 +12,29 @@
     "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
-    "@hanzo/design": "0.5.24",
-    "@hanzo/gui": "8.3.0",
-    "@hanzo/ui": "8.25.0",
-    "@hanzogui/config": "8.0.1",
-    "@hanzogui/next-theme": "8.0.0",
-    "gray-matter": "^4.0.3",
-    "lucide-react": "^0.468.0",
-    "next": "^15.3.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-markdown": "^10.1.0",
-    "react-native-svg": "^15.15.5",
-    "react-native-web": "^0.21.2",
-    "remark-gfm": "^4.0.1"
+    "@hanzo/design": "catalog:",
+    "@hanzo/gui": "catalog:",
+    "@hanzo/ui": "catalog:",
+    "@hanzogui/config": "catalog:",
+    "@hanzogui/next-theme": "catalog:",
+    "gray-matter": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-markdown": "catalog:",
+    "react-native-svg": "catalog:",
+    "react-native-web": "catalog:",
+    "remark-gfm": "catalog:"
   },
   "devDependencies": {
-    "@hanzo/font": "1.9.2",
-    "@resvg/resvg-js": "^2.6.2",
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
-    "satori": "^0.18.3",
-    "typescript": "^5.9.3"
+    "@hanzo/font": "catalog:",
+    "@resvg/resvg-js": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "satori": "catalog:",
+    "typescript": "catalog:"
   },
-  "packageManager": "pnpm@11.24.0",
-  "pnpm": {
-    "overrides": {
-      "@hanzo/ui": "8.25.0"
-    }
-  }
+  "packageManager": "pnpm@11.24.0"
 }

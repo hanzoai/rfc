@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, Github } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Github } from '@hanzo/ui/brands';
 import { Button } from '@hanzo/ui/primitives/Button';
 import { SiteHeader, SiteFooter } from '@/components/chrome';
 import { CategoryIcon } from '@/components/category-icon';

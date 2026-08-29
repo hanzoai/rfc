@@ -55,8 +55,8 @@ importers:
         version: 4.0.1
     devDependencies:
       '@hanzo/font':
-        specifier: ^1.8.0
-        version: 1.8.1(next@15.5.9(@babel/core@7.29.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))
+        specifier: ^1.8.8
+        version: 1.8.11(next@15.5.9(@babel/core@7.29.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))
       '@resvg/resvg-js':
         specifier: ^2.6.2
         version: 2.6.2
@@ -456,8 +456,8 @@ packages:
       react:
         optional: true
 
-  '@hanzo/font@1.8.1':
-    resolution: {integrity: sha512-qUw15aRa+/oAxZd+vkjkBctc8YdiaUk4yEQuhEYknIPfRDcwWiaxyr0UZ/gBI9i+zZaMXzMdKagZKRqe5eGF1g==}
+  '@hanzo/font@1.8.11':
+    resolution: {integrity: sha512-T+3Ab71VncIxplB1OIQNCjZ03312FEDKBvxrC+72O1nZ13P9f9ARjgzM1VzNy+MDs20udzYjLDtAiBaIstSiSg==}
     peerDependencies:
       next: '>=13.2.0'
 
@@ -3599,7 +3599,7 @@ snapshots:
     optionalDependencies:
       react: 19.2.3
 
-  '@hanzo/font@1.8.1(next@15.5.9(@babel/core@7.29.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))':
+  '@hanzo/font@1.8.11(next@15.5.9(@babel/core@7.29.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))':
     dependencies:
       next: 15.5.9(@babel/core@7.29.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
 
