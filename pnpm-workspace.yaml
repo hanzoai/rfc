@@ -1,13 +1,13 @@
 overrides:
   '@noble/hashes': '1.8.0'
   'zod': '^4.5.2'
-  '@hanzo/ui': '8.25.5'
+  '@hanzo/ui': '8.27.2'
 
 catalog:
   '@hanzo/design': '0.5.24'
   '@hanzo/font': '1.9.2'
   '@hanzo/gui': '8.3.1'
-  '@hanzo/ui': '8.27.0'
+  '@hanzo/ui': '8.27.2'
   '@hanzogui/config': '8.3.1'
   '@hanzogui/next-theme': '8.3.1'
   '@resvg/resvg-js': '^2.6.2'
