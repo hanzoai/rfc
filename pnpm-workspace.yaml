@@ -6,10 +6,10 @@ overrides:
 catalog:
   '@hanzo/design': '0.5.24'
   '@hanzo/font': '1.9.2'
-  '@hanzo/gui': '8.3.1'
+  '@hanzo/gui': '8.3.5'
   '@hanzo/ui': '8.27.2'
-  '@hanzogui/config': '8.3.1'
-  '@hanzogui/next-theme': '8.3.1'
+  '@hanzogui/config': '8.3.5'
+  '@hanzogui/next-theme': '8.3.5'
   '@resvg/resvg-js': '^2.6.2'
   '@types/node': '26.4.0'
   '@types/react': '19.2.18'
